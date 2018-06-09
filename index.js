@@ -5,6 +5,15 @@ const { config } = require("./config-dev");
 
 eos = Eos(config.eos);
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
+
 app.get("/", (req, res) => res.send("Hello EOSIO chat"));
 app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
   const nick = req.params.nick;
