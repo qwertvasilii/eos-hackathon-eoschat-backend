@@ -10,53 +10,47 @@ app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
   const nick = req.params.nick;
   const activeKey = req.params.activekey;
   const ownerKey = req.params.ownerkey;
-
-  try {
-    eos
-      .transaction(tr => {
-        try {
-          tr.newaccount({
-            creator: config.chat.faucetName,
-            name: nick,
-            owner: ownerKey,
-            active: activeKey
-          });
-          tr.transfer({
-            from: config.chat.faucetName,
-            to: nick,
-            quantity: "10 EOS",
-            memo: "faucet giveaway"
-          });
-          tr.transaction({
-            actions: [
-              {
-                account: config.chat.contractName,
-                name: "signup",
-                authorization: [
-                  {
-                    actor: nick,
-                    permission: "active"
-                  }
-                ],
-                data: {
-                  account: nick,
-                  username: nick
-                }
-              }
-            ]
-          });
-        } catch (e) {
-          console.log("create acc error", e);
-        }
-      })
-      .then(result => {
-        console.log(result);
-        res.json({ ok: true });
+  eos
+    .transaction(tr => {
+      tr.newaccount({
+        creator: config.chat.faucetName,
+        name: nick,
+        owner: ownerKey,
+        active: activeKey
       });
-  } catch (e) {
-    console.log("e", e);
-    res.json({ ok: false });
-  }
+      tr.transfer({
+        from: config.chat.faucetName,
+        to: nick,
+        quantity: "10 EOS",
+        memo: "faucet giveaway"
+      });
+      tr.transaction({
+        actions: [
+          {
+            account: config.chat.contractName,
+            name: "signup",
+            authorization: [
+              {
+                actor: nick,
+                permission: "active"
+              }
+            ],
+            data: {
+              account: nick,
+              username: nick
+            }
+          }
+        ]
+      });
+    })
+    .then(result => {
+      console.log("res", result);
+      res.json({ ok: true });
+    })
+    .catch(err => {
+      console.log("err", err);
+      res.json({ ok: false });
+    });
 });
 
 app.listen(3000, () =>
