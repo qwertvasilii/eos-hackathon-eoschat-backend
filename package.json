@@ -4,6 +4,7 @@
   "description": "eoshackathon eos chat project",
   "main": "index.js",
   "dependencies": {
+    "eosjs": "^14.1.0",
     "express": "^4.16.3"
   },
   "devDependencies": {},
