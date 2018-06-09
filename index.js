@@ -20,6 +20,7 @@ app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
   const activeKey = req.params.activekey;
   const ownerKey = req.params.ownerkey;
   console.log("req", req.params);
+  let tr;
   eos
     .transaction(tr => {
       tr.newaccount({
@@ -33,24 +34,6 @@ app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
         to: nick,
         quantity: "10 EOS",
         memo: "faucet giveaway"
-      });
-      tr.transaction({
-        actions: [
-          {
-            account: config.chat.contractName,
-            name: "signup",
-            authorization: [
-              {
-                actor: nick,
-                permission: "active"
-              }
-            ],
-            data: {
-              account: nick,
-              username: nick
-            }
-          }
-        ]
       });
     })
     .then(result => {
