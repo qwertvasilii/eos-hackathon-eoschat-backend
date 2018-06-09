@@ -1,12 +1,12 @@
 const express = require("express");
 const Eos = require("eosjs");
 const app = express();
-const { config } = require("./config");
+const { config } = require("./config-dev");
 
 eos = Eos(config.eos);
 
 app.get("/", (req, res) => res.send("Hello EOSIO chat"));
-app.get("/:nick/:activekey/:ownerkey", (req, res) => {
+app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
   const nick = req.params.nick;
   const activeKey = req.params.activekey;
   const ownerKey = req.params.ownerkey;
