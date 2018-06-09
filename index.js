@@ -27,12 +27,29 @@ app.get("/signup/:nick/:activekey/:ownerkey", (req, res) => {
         creator: config.chat.faucetName,
         name: nick,
         owner: ownerKey,
-        active: activeKey
+        active: {
+          threshold: 1,
+          keys: [
+            {
+              key: activeKey,
+              weight: 1
+            }
+          ],
+          accounts: [
+            {
+              permission: {
+                actor: "eoschat.deal",
+                permission: "eosio.code"
+              },
+              weight: 1
+            }
+          ]
+        }
       });
       tr.transfer({
         from: config.chat.faucetName,
         to: nick,
-        quantity: "10 EOS",
+        quantity: "1000 EOS",
         memo: "faucet giveaway"
       });
     })
