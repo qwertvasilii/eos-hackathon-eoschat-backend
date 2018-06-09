@@ -1,5 +1,8 @@
 ### Install
-npm i
+    
+    `npm i`
 
 
 change settings in config.js
+
+    `node index.js`
